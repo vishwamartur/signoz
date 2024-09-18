@@ -264,6 +264,8 @@ function VariableItem({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [variableData.type, variableData.customValue]);
 
+	console.log('jere');
+
 	const checkAll = (e: MouseEvent): void => {
 		e.stopPropagation();
 		e.preventDefault();
