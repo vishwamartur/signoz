@@ -106,6 +106,7 @@ function TraceFlameGraph(props: {
 	if (!treeData || treeData.id === 'empty' || !traceMetaData) {
 		return <div />;
 	}
+	// combine it with line 104
 	const { onSpanSelect, hoveredSpanId, selectedSpanId } = props;
 
 	const { globalStart, spread, levels } = traceMetaData;

@@ -20,6 +20,7 @@ export interface PayloadProps {
 	};
 }
 
+// why ?? better to have the columns defined on frontend or make the response as key value pairs!
 export type Span = [
 	number,
 	string,

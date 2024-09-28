@@ -17,6 +17,7 @@ function TraceDetail(): JSX.Element {
 	const { spanId, levelUp, levelDown } = useMemo(
 		() => ({
 			spanId: urlQuery.get('spanId'),
+			// TODO check the usage of level up and level down here!
 			levelUp: urlQuery.get('levelUp'),
 			levelDown: urlQuery.get('levelDown'),
 		}),

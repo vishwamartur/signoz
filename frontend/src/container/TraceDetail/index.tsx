@@ -44,24 +44,28 @@ import {
 const { Sider } = Layout;
 
 function TraceDetail({ response }: TraceDetailProps): JSX.Element {
+	// map the color for service name
 	const spanServiceColors = useMemo(
 		() => spanServiceNameToColorMapping(response[0].events),
 		[response],
 	);
 
+	// start of the timeline
 	const traceStartTime = useMemo(() => response[0].startTimestampMillis, [
 		response,
 	]);
 
+	// end of the timeline
 	const traceEndTime = useMemo(() => response[0].endTimestampMillis, [response]);
 
 	const urlQuery = useUrlQuery();
+
+	// why is this a state ?
 	const [spanId] = useState<string | null>(urlQuery.get('spanId'));
 
 	const [intervalUnit, setIntervalUnit] = useState<IIntervalUnit>(
 		INTERVAL_UNITS[0],
 	);
-	// const [searchSpanString, setSearchSpanString] = useState('');
 	const [activeHoverId, setActiveHoverId] = useState<string>('');
 	const [activeSelectedId, setActiveSelectedId] = useState<string>(spanId || '');
 	const { levelDown, levelUp } = useMemo(
@@ -71,12 +75,16 @@ function TraceDetail({ response }: TraceDetailProps): JSX.Element {
 		}),
 		[urlQuery],
 	);
+	// first conversion of spans from API response to tree structure!
 	const [treesData, setTreesData] = useState<ITraceForest>(
 		spanToTreeUtil(response[0].events),
 	);
+	// get the trace root from the above calculation and the missing span tree roots as well!
 
 	const { treesData: tree, ...traceMetaData } = useMemo(() => {
 		const sortedTreesData: ITraceForest = {
+			// this sorts the children based in the startTime.
+			// perf - rather than doing it here add it to an ordered map in while creating the tree ? think
 			spanTree: map(treesData.spanTree, (tree) => getSortedData(tree)),
 			missingSpanTree: map(
 				treesData.missingSpanTree,
@@ -85,12 +93,14 @@ function TraceDetail({ response }: TraceDetailProps): JSX.Element {
 		};
 		// Note: Handle undefined
 		/*eslint-disable */
+		// get the global start / end / levels and spread from the traversal!
 		return getSpanTreeMetadata(sortedTreesData, spanServiceColors);
 		/* eslint-enable */
 	}, [treesData, spanServiceColors]);
 
 	const firstSpanStartTime = tree.spanTree[0]?.startTime;
 
+	// again why this is a state ??
 	const [globalTraceMetadata] = useState<ITraceMetaData>({
 		...traceMetaData,
 	});
@@ -113,6 +123,7 @@ function TraceDetail({ response }: TraceDetailProps): JSX.Element {
 		[activeSelectedId, treesData],
 	);
 
+	// every node is a root node just update the root node to the focus node
 	const onFocusSelectedSpanHandler = (): void => {
 		const treeNode = getNodeById(activeSelectedId, tree);
 
@@ -121,6 +132,7 @@ function TraceDetail({ response }: TraceDetailProps): JSX.Element {
 		}
 	};
 
+	// make the original root as the root of the trace tree
 	const onResetHandler = (): void => {
 		setTreesData(spanToTreeUtil(response[0].events));
 	};
@@ -142,6 +154,7 @@ function TraceDetail({ response }: TraceDetailProps): JSX.Element {
 		<StyledRow styledclass={[Flex({ flex: 1 })]}>
 			<StyledCol flex="auto" styledclass={styles.leftContainer}>
 				<StyledRow styledclass={styles.flameAndTimelineContainer}>
+					{/* the left width is fixed here to 350px which will also be the offset for the trace timeline! */}
 					<StyledCol
 						styledclass={styles.traceMetaDataContainer}
 						flex={`${SPAN_DETAILS_LEFT_COL_WIDTH}px`}

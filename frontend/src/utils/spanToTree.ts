@@ -19,6 +19,7 @@ const getSpanReferences = (
 
 	return filteredReferences.map((rawRef) => {
 		const refObject: Record<string, string> = {};
+		// improvement - why not just JSON.parse it here ? because there is a = sign
 		rawRef
 			.replaceAll('{', '')
 			.replaceAll('}', '')
@@ -133,6 +134,7 @@ export const spanToTreeUtil = (inputSpanList: Span[]): ITraceForest => {
 		}
 
 		for (const traceId of referencedTraceIds) {
+			// why ? use case for this ?
 			if (traceId.includes(spanId)) {
 				spanTree.push(spanMap[spanId]);
 			} else {

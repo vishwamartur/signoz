@@ -48,6 +48,7 @@ export const spanServiceNameToColorMapping = (
 ): { [key: string]: string } => {
 	const allServiceMap = new Map<string, string | undefined>();
 
+	// have we stopped this signoz_ui_color_hex support ?
 	spans.forEach((spanItem) => {
 		const signozUiColorKeyIndex = spanItem[7].findIndex(
 			(span) => span === SIGNOZ_UI_COLOR_HEX,
