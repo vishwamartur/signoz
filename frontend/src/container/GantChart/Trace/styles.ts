@@ -7,6 +7,7 @@ import styled, {
 
 interface Props {
 	isOnlyChild: boolean;
+	level?: number;
 }
 
 export const Wrapper = styled.ul<Props>`
@@ -16,24 +17,8 @@ export const Wrapper = styled.ul<Props>`
 	padding-top: 0.5rem;
 	position: relative;
 	z-index: 1;
-	ul {
-		border-left: ${({ isOnlyChild }): StyledCSS =>
-			isOnlyChild && 'none'} !important;
-
-		${({ isOnlyChild }): StyledCSS =>
-			isOnlyChild &&
-			css`
-				&:before {
-					border-left: 1px solid #434343;
-					display: inline-block;
-					content: '';
-					height: 54px;
-					position: absolute;
-					left: 0;
-					top: -35px;
-				}
-			`}
-	}
+	${({ level }): string =>
+		level ? `padding-left: ${level * 17 + 48}px !important;` : ''}
 `;
 
 export const CardContainer = styled.li<{ isMissing?: boolean }>`

@@ -1,5 +1,9 @@
-import { set } from 'lodash-es';
-import { ITraceForest, ITraceTree } from 'types/api/trace/getTraceItem';
+import { cloneDeep, set } from 'lodash-es';
+import {
+	ITraceForest,
+	ITraceTree,
+	ITraceTreeFlat,
+} from 'types/api/trace/getTraceItem';
 
 interface GetTraceMetaData {
 	globalStart: number;
@@ -195,4 +199,26 @@ export const getSpanPath = (tree: ITraceTree, spanId: string): string[] => {
 	};
 	traverse(tree);
 	return spanPath;
+};
+
+export const getFlatData = (data: ITraceTree): ITraceTreeFlat[] => {
+	const flattenedTraceTree: ITraceTreeFlat[] = [];
+	const traverse = (treeNode: ITraceTree, level: number): void => {
+		if (!treeNode) {
+			return;
+		}
+
+		const updatedTreeNode = cloneDeep(treeNode);
+
+		// unset(updatedTreeNode, 'children');
+		set(updatedTreeNode, 'level', level);
+
+		flattenedTraceTree.push((updatedTreeNode as unknown) as ITraceTreeFlat);
+
+		treeNode.children.forEach((childNode) => {
+			traverse(childNode, level + 1);
+		});
+	};
+	traverse(data, 0);
+	return flattenedTraceTree;
 };

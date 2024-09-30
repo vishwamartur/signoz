@@ -1,11 +1,14 @@
+import './GantChart.styles.scss';
+
 import { MinusSquareOutlined, PlusSquareOutlined } from '@ant-design/icons';
 import { IIntervalUnit } from 'container/TraceDetail/utils';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { TableVirtuoso } from 'react-virtuoso';
 import { ITraceTree } from 'types/api/trace/getTraceItem';
 
 import { CardContainer, CardWrapper, CollapseButton } from './styles';
 import Trace from './Trace';
-import { getSpanPath } from './utils';
+import { getFlatData, getSpanPath } from './utils';
 
 function GanttChart(props: GanttChartProps): JSX.Element {
 	const {
@@ -16,8 +19,14 @@ function GanttChart(props: GanttChartProps): JSX.Element {
 		activeSelectedId,
 		setActiveSelectedId,
 		spanId,
-		intervalUnit,
+		// intervalUnit,
 	} = props;
+
+	console.log({ data, traceMetaData, spanId });
+
+	const flattenData = getFlatData(data) || [];
+
+	console.log(flattenData);
 
 	const { globalStart, spread: globalSpread } = traceMetaData;
 
@@ -48,7 +57,33 @@ function GanttChart(props: GanttChartProps): JSX.Element {
 				)}
 			</CollapseButton>
 			<CardWrapper>
-				<Trace
+				<TableVirtuoso
+					className="table-virtuoso"
+					style={{ height: '70vh', width: '100%' }}
+					totalCount={flattenData.length}
+					// eslint-disable-next-line react/no-unstable-nested-components
+					itemContent={(index): JSX.Element => (
+						<Trace
+							activeHoverId={activeHoverId}
+							activeSpanPath={activeSpanPath}
+							setActiveHoverId={setActiveHoverId}
+							key={flattenData[index].id}
+							// eslint-disable-next-line react/jsx-props-no-spreading
+							{...{
+								...flattenData[index],
+								globalSpread,
+								globalStart,
+								setActiveSelectedId,
+								activeSelectedId,
+							}}
+							level={flattenData[index].level}
+							// eslint-disable-next-line react/no-children-prop
+							isExpandAll={isExpandAll}
+							// intervalUnit={intervalUnit}
+						/>
+					)}
+				/>
+				{/* <Trace
 					activeHoverId={activeHoverId}
 					activeSpanPath={activeSpanPath}
 					setActiveHoverId={setActiveHoverId}
@@ -64,7 +99,7 @@ function GanttChart(props: GanttChartProps): JSX.Element {
 					level={0}
 					isExpandAll={isExpandAll}
 					intervalUnit={intervalUnit}
-				/>
+				/> */}
 			</CardWrapper>
 		</CardContainer>
 	);

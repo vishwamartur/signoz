@@ -89,23 +89,12 @@ export const GanttChartWrapper = styled.ul`
 
 	ul {
 		list-style: none;
-		border-left: 1px solid #434343;
 		padding-left: 1rem;
 		width: 100%;
 	}
 
 	ul li {
 		position: relative;
-
-		&:before {
-			position: absolute;
-			left: -1rem;
-			top: 10px;
-			content: '';
-			height: 1px;
-			width: 1rem;
-			background-color: #434343;
-		}
 	}
 `;
 

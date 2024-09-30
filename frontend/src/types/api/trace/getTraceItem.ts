@@ -61,6 +61,29 @@ export interface ITraceTree {
 	// For internal use
 	isProcessed?: boolean;
 }
+export interface ITraceTreeFlat {
+	id: string;
+	name: string;
+	value: number;
+	time: number;
+	startTime: number;
+	tags: ITraceTag[];
+	level: number;
+	children: ITraceTree[];
+	parent?: ITraceTree;
+	serviceName: string;
+	serviceColour: string;
+	hasError?: boolean;
+	event?: ITraceEvents[];
+	isMissing?: boolean;
+	spanKind: string;
+	statusCodeString: string;
+	statusMessage: string;
+	childReferences?: Record<string, string>[];
+	nonChildReferences?: Record<string, string>[];
+	// For internal use
+	isProcessed?: boolean;
+}
 
 export interface ITraceTag {
 	key: string;

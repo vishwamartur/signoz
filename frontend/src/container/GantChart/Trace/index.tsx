@@ -1,7 +1,7 @@
 import { CaretDownFilled, CaretRightFilled } from '@ant-design/icons';
 import { Col, Typography } from 'antd';
 import { StyledCol, StyledRow } from 'components/Styled';
-import { IIntervalUnit } from 'container/TraceDetail/utils';
+// import { IIntervalUnit } from 'container/TraceDetail/utils';
 import { useIsDarkMode } from 'hooks/useDarkMode';
 import { SPAN_DETAILS_LEFT_COL_WIDTH } from 'pages/TraceDetail/constants';
 import {
@@ -46,7 +46,7 @@ function Trace(props: TraceProps): JSX.Element {
 		level,
 		activeSpanPath,
 		isExpandAll,
-		intervalUnit,
+		// intervalUnit,
 		children,
 		isMissing,
 	} = props;
@@ -135,11 +135,13 @@ function Trace(props: TraceProps): JSX.Element {
 
 	return (
 		<Wrapper
+			data-test-id="hllp"
 			onMouseEnter={onMouseEnterHandler}
 			onMouseLeave={onMouseLeaveHandler}
 			isOnlyChild={isOnlyChild}
 			ref={ref}
 			isDarkMode={isDarkMode}
+			level={level}
 		>
 			<HoverCard
 				top={top}
@@ -181,7 +183,7 @@ function Trace(props: TraceProps): JSX.Element {
 				</Col>
 			</CardContainer>
 
-			{isOpen && (
+			{/* {isOpen && (
 				<>
 					{children.map((child) => (
 						<Trace
@@ -202,7 +204,7 @@ function Trace(props: TraceProps): JSX.Element {
 						/>
 					))}
 				</>
-			)}
+			)} */}
 		</Wrapper>
 	);
 }
@@ -224,7 +226,7 @@ interface TraceProps extends ITraceTree, ITraceGlobal {
 	level: number;
 	activeSpanPath: string[];
 	isExpandAll: boolean;
-	intervalUnit: IIntervalUnit;
+	// intervalUnit: IIntervalUnit;
 	isMissing?: boolean;
 }
 
