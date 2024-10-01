@@ -1,5 +1,7 @@
 import { cloneDeep, set } from 'lodash-es';
 import {
+	IMapTrace,
+	IMapTraceTreeValue,
 	ITraceForest,
 	ITraceTree,
 	ITraceTreeFlat,
@@ -30,7 +32,7 @@ export const getMetaDataFromSpanTree = (
 		globalStart = Math.min(globalStart, startTime);
 		globalEnd = Math.max(globalEnd, endTime);
 
-		treeNode.children.forEach((childNode) => {
+		treeNode.children?.forEach((childNode) => {
 			traverse(childNode, level + 1);
 		});
 	};
@@ -221,4 +223,17 @@ export const getFlatData = (data: ITraceTree): ITraceTreeFlat[] => {
 	};
 	traverse(data, 0);
 	return flattenedTraceTree;
+};
+
+export const getMapData = (data: ITraceTreeFlat[]): IMapTrace => {
+	const flattenMapData: IMapTrace = {};
+	data.forEach((val) => {
+		const updatedSpan = cloneDeep(val);
+		updatedSpan.parent = updatedSpan.childReferences?.[0]?.SpanId || ('' as any);
+		updatedSpan.children = val.children.map((v) => v.id) as any;
+		flattenMapData[
+			updatedSpan.id
+		] = (updatedSpan as unknown) as IMapTraceTreeValue;
+	});
+	return flattenMapData;
 };

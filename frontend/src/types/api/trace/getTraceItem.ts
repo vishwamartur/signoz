@@ -85,6 +85,32 @@ export interface ITraceTreeFlat {
 	isProcessed?: boolean;
 }
 
+export interface IMapTraceTreeValue {
+	id: string;
+	name: string;
+	value: number;
+	time: number;
+	startTime: number;
+	tags: ITraceTag[];
+	level: number;
+	children: string[];
+	parent?: string;
+	serviceName: string;
+	serviceColour: string;
+	hasError?: boolean;
+	event?: ITraceEvents[];
+	isMissing?: boolean;
+	spanKind: string;
+	statusCodeString: string;
+	statusMessage: string;
+	// For internal use
+	isProcessed?: boolean;
+}
+
+export interface IMapTrace {
+	[key: string]: IMapTraceTreeValue;
+}
+
 export interface ITraceTag {
 	key: string;
 	value: string;

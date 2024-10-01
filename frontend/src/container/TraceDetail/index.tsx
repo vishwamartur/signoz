@@ -168,7 +168,7 @@ function TraceDetail({ response }: TraceDetailProps): JSX.Element {
 						{hasMissingSpans && <MissingSpansMessage />}
 						{response[0]?.isSubTree && <SubTreeMessage />}
 					</StyledCol>
-					<Col flex="auto">
+					{/* <Col flex="auto">
 						{map(tree.spanTree, (tree) => (
 							<TraceFlameGraph
 								key={tree.id}
@@ -201,7 +201,7 @@ function TraceDetail({ response }: TraceDetailProps): JSX.Element {
 								))}
 							</FlameGraphMissingSpansContainer>
 						)}
-					</Col>
+					</Col> */}
 				</StyledRow>
 				<StyledRow styledclass={[styles.traceDateAndTimelineContainer]}>
 					{isGlobalTimeVisible && (

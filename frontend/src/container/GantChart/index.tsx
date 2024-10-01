@@ -2,13 +2,14 @@ import './GantChart.styles.scss';
 
 import { MinusSquareOutlined, PlusSquareOutlined } from '@ant-design/icons';
 import { IIntervalUnit } from 'container/TraceDetail/utils';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 import { TableVirtuoso } from 'react-virtuoso';
 import { ITraceTree } from 'types/api/trace/getTraceItem';
 
 import { CardContainer, CardWrapper, CollapseButton } from './styles';
 import Trace from './Trace';
-import { getFlatData, getSpanPath } from './utils';
+import { getFlatData, getMapData, getSpanPath } from './utils';
+import { listResponse } from './listResponse';
 
 function GanttChart(props: GanttChartProps): JSX.Element {
 	const {
@@ -22,11 +23,13 @@ function GanttChart(props: GanttChartProps): JSX.Element {
 		// intervalUnit,
 	} = props;
 
-	console.log({ data, traceMetaData, spanId });
+	// console.log({ data, traceMetaData, spanId });
 
-	const flattenData = getFlatData(data) || [];
+	const mapData = listResponse.spans;
 
-	console.log(flattenData);
+	const virtuosoListRender = Object.values(mapData);
+
+	// console.log(mapData);
 
 	const { globalStart, spread: globalSpread } = traceMetaData;
 
@@ -60,23 +63,23 @@ function GanttChart(props: GanttChartProps): JSX.Element {
 				<TableVirtuoso
 					className="table-virtuoso"
 					style={{ height: '70vh', width: '100%' }}
-					totalCount={flattenData.length}
+					totalCount={virtuosoListRender.length}
 					// eslint-disable-next-line react/no-unstable-nested-components
 					itemContent={(index): JSX.Element => (
 						<Trace
 							activeHoverId={activeHoverId}
 							activeSpanPath={activeSpanPath}
 							setActiveHoverId={setActiveHoverId}
-							key={flattenData[index].id}
+							key={virtuosoListRender[index].id}
 							// eslint-disable-next-line react/jsx-props-no-spreading
 							{...{
-								...flattenData[index],
+								...virtuosoListRender[index],
 								globalSpread,
 								globalStart,
 								setActiveSelectedId,
 								activeSelectedId,
 							}}
-							level={flattenData[index].level}
+							level={virtuosoListRender[index].level}
 							// eslint-disable-next-line react/no-children-prop
 							isExpandAll={isExpandAll}
 							// intervalUnit={intervalUnit}
